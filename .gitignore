@@ -1,0 +1,12 @@
+node_modules/
+dist/
+out/
+.env
+.env.local
+*.log
+npm-debug.log*
+
+# Ícones personalizados (adicione os seus, não commitar binários de outros)
+assets/icon.ico
+assets/tray.png
+assets/logo.png

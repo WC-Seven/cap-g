@@ -1,0 +1,14 @@
+Coloque os arquivos de ícone aqui com exatamente estes nomes:
+
+  icon.ico   → ícone da janela e da barra de tarefas do Windows
+               Tamanho recomendado: ICO multi-tamanho contendo 16, 32, 48, 64, 128 e 256 px
+               (ferramentas como https://icoconvert.com aceitam um PNG 256x256 e geram o ICO)
+
+  tray.png   → ícone da bandeja do sistema (canto inferior direito do Windows)
+               Tamanho: 32x32 px, fundo transparente
+               (o Windows usa 16x16 na bandeja; enviar 32x32 garante qualidade em HiDPI)
+
+  logo.png   → logotipo exibido na barra de título do editor
+               Tamanho: 32x32 px, fundo transparente (será exibido com 18x18 px)
+
+Enquanto os arquivos não existirem o app usa o ícone gerado programaticamente como fallback.

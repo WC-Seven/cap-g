@@ -1,0 +1,306 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #2e2e2e;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Titlebar ── */
+#titlebar {
+  height: 32px;
+  background: #1a1a1a;
+  color: #bbb;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+  font-size: 12px;
+}
+#title-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  margin-right: 6px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+#drag-area { flex: 1; }
+
+#btn-close-win {
+  -webkit-app-region: no-drag;
+  background: none;
+  border: none;
+  color: #bbb;
+  cursor: pointer;
+  font-size: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#btn-close-win:hover { background: #c42b1c; color: #fff; }
+
+/* ── Workspace ── */
+#workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#canvas-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#canvas-container {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+#canvas {
+  display: block;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.7);
+  cursor: crosshair;
+}
+
+#crop-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  cursor: crosshair;
+}
+
+/* Dica flutuante no modo recorte */
+#crop-hint {
+  position: fixed;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 5px;
+  font: 12px/1.5 'Segoe UI', Arial, sans-serif;
+  pointer-events: none;
+  z-index: 99000;
+  white-space: nowrap;
+  display: none;
+}
+
+/* ── Toolbar direita ── */
+#toolbar-right {
+  width: 46px;
+  background: #f2f2f2;
+  border-left: 1px solid #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 3px;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.tool {
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  transition: background 0.1s, border-color 0.1s;
+}
+.tool:hover { background: #e2e2e2; }
+.tool.active {
+  background: #d0e8ff;
+  border-color: #4a90e2;
+  color: #1a68c4;
+}
+
+.sep {
+  width: 28px;
+  height: 1px;
+  background: #d0d0d0;
+  margin: 3px 0;
+  flex-shrink: 0;
+}
+
+/* Seletor de cor */
+.color-wrap {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 2px solid #bbb;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.color-wrap input[type="color"] {
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  transform: translate(-10px, -10px);
+}
+
+/* Slider de espessura (vertical) */
+.stroke-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  flex-shrink: 0;
+}
+.stroke-wrap input[type="range"] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 24px;
+  height: 60px;
+  cursor: pointer;
+  accent-color: #4a90e2;
+}
+
+/* Menu de contexto do texto */
+#text-ctx-menu {
+  position: fixed;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  z-index: 99999;
+  overflow: hidden;
+  min-width: 150px;
+}
+.ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+}
+.ctx-item:hover { background: #f0f4ff; color: #1a68c4; }
+#ctx-delete:hover { background: #fff0f0; color: #c44; }
+
+/* Caret dos botões com sub-menu */
+#tool-shape, #tool-blur { position: relative; }
+.shape-caret {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 7px;
+  color: #999;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Menu popup de formas e de forma do blur */
+#shape-menu, #blur-menu {
+  position: fixed;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  z-index: 99999;
+  overflow: hidden;
+  min-width: 150px;
+}
+.shape-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+}
+.shape-opt:hover    { background: #f0f4ff; color: #1a68c4; }
+.shape-opt.selected { font-weight: 600; color: #1a68c4; }
+
+/* ── Toolbar inferior ── */
+#toolbar-bottom {
+  height: 46px;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 14px;
+  flex-shrink: 0;
+  border-top: 1px solid #444;
+}
+
+#toolbar-bottom button {
+  background: #2a2a2a;
+  color: #ddd;
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 5px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.1s;
+}
+#toolbar-bottom button:hover { background: #3c3c3c; }
+
+#btn-expand { border-color: #a060c8; color: #d0a0ff; }
+#btn-save   { border-color: #3a78c9; color: #7dc0ff; }
+#btn-copy   { border-color: #4a9e4a; color: #8de08d; }
+#btn-close  { border-color: #777; }
+
+/* ── Overlay de reseleção ── */
+#expand-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95000;
+  background: #000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: crosshair;
+}
+#expand-overlay.active { display: flex; }
+
+#expand-canvas { display: block; cursor: crosshair; }
+
+#expand-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 5px;
+  font: 12px/1.5 'Segoe UI', Arial, sans-serif;
+  pointer-events: none;
+  white-space: nowrap;
+}

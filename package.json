@@ -1,0 +1,15 @@
+{
+  "name": "cap-g",
+  "version": "1.0.0",
+  "description": "Ferramenta de captura de tela com anotações e borramento de dados sensíveis",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
+}
